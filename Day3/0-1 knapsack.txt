@@ -1,0 +1,30 @@
+int f(int ind, int max_w, vector<int>& values, vector<int>& weights, vector<vector<int>>& memo) {
+    // Base cases
+    if (max_w == 0 || ind < 0)
+        return 0;
+
+    // Check if the result is already memoized
+    if (memo[ind][max_w] != -1)
+        return memo[ind][max_w];
+
+    // Possibilities
+    // Not take the item at index 'ind'
+    int notTake = f(ind - 1, max_w, values, weights, memo);
+
+    // Take the item at index 'ind' if its weight is less than or equal to 'max_w'
+    int take = 0;
+    if (weights[ind] <= max_w)
+        take = values[ind] + f(ind - 1, max_w - weights[ind], values, weights, memo);
+
+    // Memoize the result
+    memo[ind][max_w] = max(take, notTake);
+    return memo[ind][max_w];
+}
+
+int maxProfit(vector<int>& values, vector<int>& weights, int n, int w) {
+    // Create a memoization table
+    vector<vector<int>> memo(n, vector<int>(w + 1, -1));
+
+    // Call the recursive function with memoization
+    return f(n - 1, w, values, weights, memo);
+}

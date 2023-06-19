@@ -1,0 +1,29 @@
+// int f(int ind, vector<int> &prices, vector<int> &dp) {
+
+//   // base case
+//   if (dp[ind] != -1)
+//     return dp[ind];
+//   if (ind == 0)
+//     return 0;
+
+//   // all possbilities
+//   int mx = INT_MIN;
+//   for (int i = 1; i <= ind; i++) {
+//     int cost = f(ind - i, prices, dp) + prices[i];
+//     mx = max(mx, cost);
+//   }
+//   return dp[ind] = mx;
+// }
+int cutRod(vector<int> &price, int n) {
+  price.insert(price.begin(), 0);
+  vector<int> dp(n + 1, 0);  
+  for (int ind = 1; ind <= n; ind++) {
+    int mx = INT_MIN;
+    for (int i = 1; i <= ind; i++) {
+      int cost = dp[ind - i] + price[i];
+      mx = max(mx, cost);
+    }
+     dp[ind] = mx;
+  }
+  return dp[n];
+}

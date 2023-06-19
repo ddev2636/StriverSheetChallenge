@@ -1,0 +1,29 @@
+int floydWarshall(int n,int m, int src, int dest, vector<vector<int>>& edges) {
+
+
+    vector<vector<int>> cost(n + 1, vector<int>(n + 1, INT_MAX));
+    
+    for (int i = 1; i <= n; i++) {
+        cost[i][i] = 0;
+    }
+    
+    for (auto& edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
+        int w = edge[2];
+        cost[u][v] = w;
+    }
+    
+    for (int via = 1; via <= n; via++) {
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (cost[i][via] != INT_MAX &&
+                    cost[via][j] != INT_MAX) {
+                    cost[i][j] = min(cost[i][j], cost[i][via] + cost[via][j]);
+                }
+            }
+        }
+    }
+    
+    return cost[src][dest]==INT_MAX?1e9:cost[src][dest];
+}

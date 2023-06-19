@@ -1,0 +1,84 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the Binary Tree node structure:
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+bool isLeaf(TreeNode<int>*root){
+    if(root->left==NULL && root->right==NULL) return true;
+    return false;
+}
+void addLeftBoundary(TreeNode<int>*root,vector<int>&res){
+    TreeNode<int>*curr=root->left;
+    while(curr){
+        if(!isLeaf(curr)) res.push_back(curr->data);
+        if(curr->left){
+            curr=curr->left;
+        }
+        else{
+            curr=curr->right;
+        }
+    }
+
+}
+void addRightBoundary(TreeNode<int>*root,vector<int>&res){
+    vector<int> rev;
+    TreeNode<int>*curr=root->right;
+    while(curr){
+        if(!isLeaf(curr)) rev.push_back(curr->data);
+        if(curr->right){
+            curr=curr->right;
+        }
+        else{
+            curr=curr->left;
+        }
+    }
+    reverse(rev.begin(),rev.end());
+    for(auto i:rev){
+        res.push_back(i);
+    }
+}
+void addLeafNodes(TreeNode<int>*root,vector<int> &res){
+    if(isLeaf(root)) {
+        res.push_back(root->data);
+        return;
+    }
+    if(root->left) addLeafNodes(root->left,res);
+    if(root->right) addLeafNodes(root->right,res);
+}
+
+
+vector<int> traverseBoundary(TreeNode<int>* root){
+    // Write your code here.
+    vector<int> res;
+    if(root==NULL) return res;
+    if(!isLeaf(root)){
+        res.push_back(root->data);
+        addLeftBoundary(root,res);
+        addLeafNodes(root,res);
+        addRightBoundary(root,res);
+    }
+    else res.push_back(root->data);
+    return res;
+}

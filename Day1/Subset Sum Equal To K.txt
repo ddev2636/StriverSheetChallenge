@@ -1,0 +1,68 @@
+//recursive function
+bool f(int ind, int target, vector<int> &a) {
+  if (target == 0)
+    return true;
+  if (ind == 0)
+    return (a[0] == target);
+
+  bool notTake = f(ind - 1, target, a);
+  bool take = false;
+  if (a[ind] <= target)
+    take = f(ind - 1, target - a[ind], a);
+
+  return take | notTake;
+}
+
+
+//tabulation
+#include <bits/stdc++.h>
+bool subsetSumToK(int n, int k, vector<int> &a) {
+  vector<vector<int>> dp(n, vector<int>(k + 1, 0));
+
+  // Base case
+  for (int ind = 0; ind < n; ind++) {
+    dp[ind][0] = 1;
+  }
+  if (a[0] <= k)
+    dp[0][a[0]] = 1;
+
+  for (int ind = 1; ind < n; ind++) {
+    for (int target = 0; target <= k; target++) {
+      bool notTake = dp[ind - 1][target];
+      bool take = false;
+      if (a[ind] <= target)
+        take = dp[ind - 1][target - a[ind]];
+
+      dp[ind][target] = take || notTake;
+    }
+  }
+
+  return dp[n - 1][k];
+}
+
+
+//space optimisation
+#include <bits/stdc++.h>
+bool subsetSumToK(int n, int k, vector<int> &a) {
+  vector<int> curr(k+1,0);
+  vector<int> prev(k+1,0);
+
+  // Base case
+  prev[0]=curr[0]=1;
+  if (a[0] <= k)
+    prev[a[0]] = 1;
+
+  for (int ind = 1; ind < n; ind++) {
+    for (int target = 0; target <= k; target++) {
+      bool notTake = prev[target];
+      bool take = false;
+      if (a[ind] <= target)
+        take = prev[target - a[ind]];
+
+      curr[target] = take || notTake;
+    }
+    prev=curr;
+  }
+
+  return prev[k];
+}

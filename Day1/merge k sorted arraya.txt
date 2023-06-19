@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+bool comparator(pair<int,pair<int,int>> &a,pair<int,pair<int,int>>&b){
+    return a.first<b.first;
+}
+vector<int> mergeKSortedArrays(vector<vector<int>>& kArrays, int k)
+{
+    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+    
+    for (int i = 0; i < k; i++) {
+        if (!kArrays[i].empty()) {
+            pq.push({ kArrays[i][0], { 0, i } });
+        }
+    }
+
+    vector<int> ans;
+
+    while (!pq.empty()) {
+        pair<int, pair<int, int>> el = pq.top();
+        int val = el.first;
+        int ind = el.second.first;
+        int arrNo = el.second.second;
+        pq.pop();
+        ans.push_back(val);
+        if (ind < kArrays[arrNo].size() - 1) {
+            pq.push({ kArrays[arrNo][ind + 1], { ind + 1, arrNo } });
+        }
+    }
+    
+    return ans;
+}
+
