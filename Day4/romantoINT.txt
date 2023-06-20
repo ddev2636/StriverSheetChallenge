@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+
+int romanToInt(std::string s) {
+    std::map<char, int> romanNumerals;
+    romanNumerals['I'] = 1;
+    romanNumerals['V'] = 5;
+    romanNumerals['X'] = 10;
+    romanNumerals['L'] = 50;
+    romanNumerals['C'] = 100;
+    romanNumerals['D'] = 500;
+    romanNumerals['M'] = 1000;
+    
+    int ans = 0;
+    int n = s.size();
+    
+    for (int i = 0; i < n; i++) {
+        if (i < n - 1 && romanNumerals[s[i]] < romanNumerals[s[i + 1]]) {
+            ans -= romanNumerals[s[i]];
+        } else {
+            ans += romanNumerals[s[i]];
+        }
+    }
+    
+    return ans;
+}
