@@ -1,0 +1,46 @@
+/*
+    Time Complexity:  O(N).
+    Space Complexity: O(N).
+
+    Where 'N' is the number of nodes in the tree.
+*/
+
+bool isPresent(TreeNode<int> *temp, int x, vector<int> &ans)
+{
+    // Invalid node.
+    if (temp == NULL)
+    {
+        return false;
+    }
+    // Found the node which have data value equal to 'X'.
+    if (temp->data == x)
+    {
+        return true;
+    }
+    // Check if the left subtree contains 'X' or not.
+    if (isPresent(temp->left, x, ans))
+    {
+        ans.push_back(temp->left->data);
+        return true;
+    }
+    // Check if the right subtree contains 'X' or not.
+    if (isPresent(temp->right, x, ans))
+    {
+        ans.push_back(temp->right->data);
+        return true;
+    }
+    // If the node is not present in either of the subtree.
+    return false;
+}
+
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+    vector<int> ans;
+
+    isPresent(root, x, ans);
+    ans.push_back(root->data);
+    // Reverse the vector.
+    reverse(ans.begin(), ans.end());
+    // Finally return the vector.
+    return ans;
+}
