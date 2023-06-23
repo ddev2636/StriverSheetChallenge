@@ -1,0 +1,28 @@
+#include <bits/stdc++.h> 
+
+bool comp(const vector<int>& a, const vector<int>& b) {
+    return a[0] < b[0];
+}
+
+vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals) {
+    int n = intervals.size();
+    
+    // Sorting intervals based on the start point
+    sort(intervals.begin(), intervals.end(), comp);
+    
+    vector<vector<int>> merged;
+    merged.push_back(intervals[0]);
+    
+    for (int i = 1; i < n; i++) {
+        int m = merged.size();
+        if (merged[m-1][1] >= intervals[i][0]) {
+            // Overlapping intervals, update the end point
+            merged[m-1][1] = max(merged[m-1][1], intervals[i][1]);
+        } else {
+            // Non-overlapping intervals, add a new interval
+            merged.push_back(intervals[i]);
+        }
+    }
+    
+    return merged;
+}
